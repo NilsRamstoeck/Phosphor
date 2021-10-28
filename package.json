@@ -5,17 +5,17 @@
    "scripts": {
       "dev": "npm-run-all --parallel dev-server dev-client serve",
       "dev-server": "tsc -w",
-      "dev-client": "parcel watch client/html/*.html",
-      "serve": "npm-run-all serve-client serve-server",
+      "dev-client": "parcel watch client/html/*.html --out-dir dist/frontend",
+      "serve": "npm-run-all --parallel serve-client serve-server",
       "serve-client": "npx serve dist/frontend",
-      "serve-client": "nodemon dist/backend/main.js"
+      "serve-server": "nodemon dist/backend/js/main.js"
    },
    "//": {
       "vue.js": "development",
       "vue.common.js": "production"
    },
    "alias": {
-      "vue": "./node_modules/vue/dist/vue.common.js"
+      "vue": "./node_modules/vue/dist/vue.js"
    },
    "repository": {
       "type": "git",
@@ -37,6 +37,7 @@
       "vue-hot-reload-api": "^2.3.4"
    },
    "devDependencies": {
+      "@types/express": "^4.17.13",
       "@types/node": "^16.11.6",
       "@vue/component-compiler-utils": "^3.2.2",
       "npm-run-all": "^4.1.5",
