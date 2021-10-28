@@ -1,0 +1,8 @@
+{
+   "include": ["server/**/*"],
+   "compilerOptions": {
+      "module": "commonjs",
+      "target": "ES5",
+      "outDir": "dist/backend/js",
+   }
+}

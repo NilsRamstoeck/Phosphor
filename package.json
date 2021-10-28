@@ -1,0 +1,48 @@
+{
+   "name": "phosphor",
+   "version": "1.0.0",
+   "description": "A simple web chat",
+   "scripts": {
+      "dev": "npm-run-all --parallel dev-server dev-client serve",
+      "dev-server": "tsc -w",
+      "dev-client": "parcel watch client/html/*.html",
+      "serve": "npm-run-all serve-client serve-server",
+      "serve-client": "npx serve dist/frontend",
+      "serve-client": "nodemon dist/backend/main.js"
+   },
+   "//": {
+      "vue.js": "development",
+      "vue.common.js": "production"
+   },
+   "alias": {
+      "vue": "./node_modules/vue/dist/vue.common.js"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/NilsRamstoeck/Phosphor.git"
+   },
+   "author": "Nils Ramstöck",
+   "license": "GPL-3.0",
+   "bugs": {
+      "url": "https://github.com/NilsRamstoeck/Phosphor/issues"
+   },
+   "homepage": "https://github.com/NilsRamstoeck/Phosphor#readme",
+   "dependencies": {
+      "axios": "^0.24.0",
+      "express": "^4.17.1",
+      "jquery": "^3.6.0",
+      "nodemon": "^2.0.14",
+      "nosql": "^6.1.0",
+      "vue": "^2.6.14",
+      "vue-hot-reload-api": "^2.3.4"
+   },
+   "devDependencies": {
+      "@types/node": "^16.11.6",
+      "@vue/component-compiler-utils": "^3.2.2",
+      "npm-run-all": "^4.1.5",
+      "parcel-bundler": "^1.12.5",
+      "sass": "^1.43.3",
+      "typescript": "^4.4.4",
+      "vue-template-compiler": "^2.6.14"
+   }
+}

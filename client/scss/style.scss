@@ -1,0 +1,33 @@
+:root{
+   --font-title: "Roboto";
+   --font-body: "Arial";
+
+   --color-light: #eee;
+   --color-dark: rgb(51, 51, 51);
+   --color-primary-light: #cd0000;
+   --color-primary-dark: #9a0000;
+
+   --foreground: var(--color-dark);
+   --background: var(--color-light);
+   --color-primary: var(--color-primary-dark);
+   --color-primary: var(--color-primary-light);
+
+}
+
+.darkmode{
+   --foreground: var(--color-light);
+   --background: var(--color-dark);
+   --color-primary: var(--color-primary-light);
+}
+
+body, html{
+   margin: 0;
+   padding: 0;
+}
+
+body{
+   font-family: var(--font-body);
+   color: var(--foreground);
+   background: var(--background);
+   font-size: 24px;
+}
