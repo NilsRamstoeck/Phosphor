@@ -2,15 +2,16 @@ import Vue from 'vue';
 import App from "../components/App.vue";
 import axios from 'axios';
 
-axios.defaults.port = 8080;
+window.axios = axios;
 
 axios({
-  method: 'post',
-  url: 'localhost:8080/',
-  port: '8080'
-}).then((response) => console.log);
-
-console.log(axios);
+  method: 'POST',
+  url: '/',
+  baseURL: 'http://localhost:8080',
+})
+.then((response) => {
+   console.log(response.data.message);
+})
 
 new  Vue({
   el: '#app',
