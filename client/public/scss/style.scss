@@ -9,8 +9,6 @@
 
    --foreground: var(--color-dark);
    --background: var(--color-light);
-   --color-primary: var(--color-primary-dark);
-   --color-primary: var(--color-primary-light);
 
 }
 
@@ -18,6 +16,7 @@
    --foreground: var(--color-light);
    --background: var(--color-dark);
    --color-primary: var(--color-primary-light);
+   --color-primary-hover: var(--color-primary-dark);
 }
 
 body, html{
