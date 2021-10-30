@@ -1,6 +1,9 @@
+@use './components';
+
 :root{
    --font-title: "Roboto";
    --font-body: "Arial";
+   --font-size: 30px;
 
    --color-light: #eee;
    --color-dark: rgb(51, 51, 51);
@@ -28,5 +31,9 @@ body{
    font-family: var(--font-body);
    color: var(--foreground);
    background: var(--background);
-   font-size: 24px;
+   font-size: var(--font-size);
+}
+
+h1,h2,h3,h4,h5,h6{
+   color: var(--color-primary);
 }

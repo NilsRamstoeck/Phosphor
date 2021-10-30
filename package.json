@@ -15,7 +15,7 @@
       "vue.common.js": "production"
    },
    "alias": {
-      "@fontawesome": "./node_modules/@fortawesome/scss/fontawesome.scss",
+      "functions": "./client/src/functions.js",
       "vue": "./node_modules/vue/dist/vue.js"
    },
    "repository": {
@@ -42,11 +42,13 @@
       "@types/express": "^4.17.13",
       "@types/node": "^16.11.6",
       "@vue/component-compiler-utils": "^3.2.2",
+      "babel-core": "^6.26.3",
+      "babel-preset-env": "^1.7.0",
+      "nodemon": "^2.0.14",
       "npm-run-all": "^4.1.5",
       "parcel-bundler": "^1.12.5",
       "sass": "^1.43.3",
       "typescript": "^4.4.4",
-      "nodemon": "^2.0.14",
       "vue-template-compiler": "^2.6.14"
    }
 }

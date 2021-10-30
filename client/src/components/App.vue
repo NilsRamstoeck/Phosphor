@@ -1,14 +1,18 @@
 <template>
-  <div class="app">
-    <router-view></router-view>
-  </div>
+   <div class="app">
+      <login v-if="!loggedIn"></login>
+   </div>
 </template>
 
 <script>
-  export default{
-    name: 'App',
-  }
+   import Login from './Login.vue'
+   export default{
+      name: 'App',
+      components: {Login},
+      data: function () {
+         return{
+            loggedIn: false,
+         }
+      }
+   }
 </script>
-
-<style scoped>
-</style>

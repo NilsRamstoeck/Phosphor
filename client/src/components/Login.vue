@@ -1,40 +1,61 @@
 <template>
-  <div class="login">
-    <h1>Login :)</h1>
+   <div class="login-container">
+      <div class="login-wrapper">
 
-    <form class="login-form" >
+         <h1 class="login" slot="header">LOGIN</h1>
+         <form class="login login-form" method="post" @submit="onSubmit" slot="content">
 
-      <label for="Username">Username</label>
-      <input type="text" name="Username" placeholder="Name">
-      <br>
-      <label for="Password">Password</label>
-      <input type="password" name="Password" placeholder="Password">
-      <br>
-      <button type="submit" name="submit">Log In</button>
-    </form>
-  </div>
+            <input class="login" type="text" name="username" placeholder="Username" required>
+            <br>
+            <input class="login" type="password" name="password" placeholder="Password" required>
+            <br>
+
+            <button v-if="true" class="login" type="submit" name="submit">Log In</button>
+
+         </form>
+
+      </div>
+   </div>
 </template>
 
 <script>
-  export default {
-    name: 'Login',
-    props: {
+   import {post} from 'functions';
 
-    },
-    data: function(){
-      return {
+   export default {
+      name: 'Login',
+      components: {},
+      props: {
 
+      },
+      data: function(){
+         return {
+
+         }
+      },
+      methods: {
+         onSubmit: function (e) {
+            const form = new FormData(e.target);
+            const data = {};
+
+            for(const entry of form){
+               data[entry[0]] = entry[1];
+            }
+
+            post({
+               username: data.username,
+               password: data.password
+            })
+            .then((res) => {
+               console.log(res);
+            });
+            e.preventDefault();
+         }
+      },
+      mounted: function () {
+         post({
+            text: 'Hi'
+         })
+         .then((res) => console.log(res));
       }
-    },
-    methods: {
-
-    },
-    mounted: function () {
-      console.log("MOUNTED");
-    }
-  }
+   }
 </script>
-
-<style scoped>
-
-</style>

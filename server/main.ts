@@ -1,6 +1,11 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+
 
 const app = express();
+
+app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 
 app.options("/*", function(_req, res, _next){
    res.header('Access-Control-Allow-Origin', '*');
@@ -16,9 +21,9 @@ app.use(function(_req, res, next) {
    next();
 })
 
-app.post('/', (_req :any, res :any) =>
-res.json({ message: 'Hello Client' })
-);
+app.post('/', (req, res) => {
+   res.json({ message: 'Hello Client', received: req.body})
+});
 
 const port = process.env.PORT || 8080;
 
