@@ -41,7 +41,7 @@
                data[entry[0]] = entry[1];
             }
 
-            post({
+            post('login', {
                username: data.username,
                password: data.password
             })
@@ -52,10 +52,6 @@
          }
       },
       mounted: function () {
-         post({
-            text: 'Hi'
-         })
-         .then((res) => console.log(res));
       }
    }
 </script>
