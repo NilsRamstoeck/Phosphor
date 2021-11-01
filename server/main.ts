@@ -1,17 +1,23 @@
 import app from './express-setup';
-import './functions';
-import './types';
+import {PhosphorMessage} from './types';
+import {handleLogin, handleMessage, handleError} from './handlers';
+import * as Constants from './constants';
 
 app.post('/', (req, res) => {
-   // const msg :PhosphorMessage = {
-   //    id: -1,
-   //    timestamp: (new Date()).toISOString(),
-   //    action: 'template',
-   //    data: {
-   //       text: 'Hallo',
-   //    }
-   // }
-   const msg :PhosphorMessage = req.body;
-
-   res.json({ message: 'Hello Client', received: req.body, response: msg})
+   const message :PhosphorMessage = req.body;
+   switch (message.action) {
+      case Constants.LOGIN_ACTION:
+      res.json(handleLogin(message));
+      break;
+      case Constants.MESSAGE_ACTION:
+      res.json(handleMessage(message));
+      break;
+      case undefined:
+      case null:
+      res.json(handleError(Constants.NO_ACTION));
+      break;
+      default:
+      res.json(handleError(Constants.UNKNOWN_ACTION));
+      break;
+   }
 });

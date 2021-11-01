@@ -4,6 +4,7 @@ var app = express();
 
 app.use(express.json());
 
+//Setup CORS requests
 app.options("/*", function(_req, res, _next){
    res.header('Access-Control-Allow-Origin', '*');
    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
