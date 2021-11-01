@@ -1,13 +1,13 @@
 import 'regenerator-runtime/runtime';
 
-const post = async function (action, data) {
+export async function post (action, data) {
    const msg = {
       timestamp: (new Date()).toISOString(),
       action: action,
       data
    }
 
-   return await fetch(`http://${window.location.hostname}:2222`, {
+   const response = await fetch(`http://${window.location.hostname}:2222`, {
       method: 'post',
       headers: {
          "Content-Type": "application/json"
@@ -15,8 +15,10 @@ const post = async function (action, data) {
       body: JSON.stringify(msg)
    })
    .then((response) => response.json());
+
+   console.log(response);
+
+   return response;
 }
 
-export {
-   post
-};
+window.post = post;
