@@ -26,6 +26,13 @@ export interface PhosphorMessage{
    data: object
 }
 
+// Interface for incoming messages
+export interface PhosphorUser{
+   username: string,
+   password: string,
+   sessions: PhosphorSession[] //minutes before session timeout
+}
+
 /*
  * Outgoing Messages are seperated into templates and full messages
  * this is to isolate constant computed properties like the timestamp
@@ -76,6 +83,27 @@ export function PhosphorResponse(msg:PhosphorMessage, template:PhosphorResponseT
       action: msg.action,
       result: template.result,
       data: template.data
+   }
+   return res;
+}
+
+/// Session ///
+
+//Template
+interface PhosphorSessionTemplate{
+   session_id: string,
+   expire: number
+}
+
+export interface PhosphorSession extends PhosphorSessionTemplate{
+   timestamp: string;
+}
+
+export function PhosphorSession(template:PhosphorSessionTemplate) :PhosphorSession {
+   const res :PhosphorSession = {
+      timestamp: new Date().toISOString(),
+      session_id: template.session_id,
+      expire: template.expire
    }
    return res;
 }

@@ -11,6 +11,13 @@ interface InserParams{
    insert: object
 }
 
+
+interface UpdateParams{
+   collection: string,
+   find: object,
+   update: object
+}
+
 const db_uri = `mongodb://${details.user}:${details.pass}\@${details.host}:${details.port}`;
 const client = new MongoClient(db_uri);
 
@@ -50,6 +57,7 @@ export async function findOne(cmd :FindParams) :Promise<Document>{
    return doc;
 }
 
+//TODO: add support for projection
 export async function find(cmd :FindParams) :Promise<Document>{
    try {
       // Connect the client to the server
@@ -84,6 +92,22 @@ export async function insertOne(cmd :InserParams){
       const collection = db.collection(cmd.collection);
 
       await collection.insertOne(cmd.insert);
+
+   } finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+   }
+}
+
+export async function updateOne(cmd :UpdateParams){
+   try {
+      // Connect the client to the server
+      await client.connect();
+
+      const db = client.db(details.database);
+      const collection = db.collection(cmd.collection);
+
+      await collection.updateOne(cmd.find, {$set: cmd.update});
 
    } finally {
       // Ensures that the client will close when you finish/error

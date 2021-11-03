@@ -1,9 +1,15 @@
 import * as Constants from './constants';
-import {PhosphorMessage, PhosphorErrorMessage, PhosphorErrorType, PhosphorResponse} from './types';
 import {en_US as locale} from './locale';
-import {validateType, hash} from './functions';
-import {findOne, insertOne} from './db';
+import {validateType, hash, generateSession, validateSession} from './functions';
+import {findOne, insertOne, updateOne} from './db';
 
+import {
+   PhosphorMessage,
+   PhosphorErrorMessage,
+   PhosphorErrorType,
+   PhosphorResponse,
+   PhosphorUser,
+} from './types';
 
 //defines the shape of received user data for logins and registering
 const UserDataValidator = {
@@ -33,7 +39,7 @@ export async function handleLogin(msg :PhosphorMessage){
          return handleError(Constants.err.INVALID_PASSWORD);
       }
 
-      let user = await findOne({
+      const user = await findOne({
          collection: Constants.db.USERS_COLLECTION,
          find: {
             [Constants.db.USERNAME_FIELD]: data.username
@@ -44,8 +50,28 @@ export async function handleLogin(msg :PhosphorMessage){
          const hashedPassword = user[Constants.db.PASSWORD_FIELD];
          const salt = hashedPassword.split(':')[0];
          if(hashedPassword == hash(data.password, salt)){
+            //generate session and hash ID for database
+            const session = generateSession(data.username);
+            const session_id = session.session_id;
+            session.session_id = hash(session.session_id);
+
+            user.sessions.push(session);
+
+            await updateOne({
+               collection: Constants.db.USERS_COLLECTION,
+               find: {
+                  _id: user._id
+               },
+               update: {
+                  sessions: user.sessions
+               }
+            })
+
             return PhosphorResponse(msg, {
-               result: true
+               result: true,
+               data: {
+                  session_id
+               }
             })
          } else {
             return handleError(Constants.err.WRONG_DETAILS);
@@ -74,25 +100,36 @@ export async function handleRegister(msg :PhosphorMessage){
          return handleError(Constants.err.INVALID_PASSWORD);
       }
 
-      let user = await findOne({
+      const user_exists = await findOne({
          collection: Constants.db.USERS_COLLECTION,
          find: {
             [Constants.db.USERNAME_FIELD]: data.username
          }
-      })
+      }) == null;
 
-      if(user == null){
+      if(user_exists){
+         //generate session and hash ID for database
+         const session = generateSession(data.username);
+         const session_id = session.session_id;
+         session.session_id = hash(session.session_id);
+
          // create user
-         data.password = hash(data.password);
-         console.log(data);
+         const user :PhosphorUser = {
+            username: data.username,
+            password: hash(data.password),
+            sessions: [session]
+         }
 
          await insertOne({
             collection: Constants.db.USERS_COLLECTION,
-            insert: data
+            insert: user
          });
 
          return PhosphorResponse(msg, {
-            result: true
+            result: true,
+            data: {
+               session_id
+            }
          });
 
       } else {
