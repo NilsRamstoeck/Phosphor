@@ -65,7 +65,15 @@
                   console.log('LOGIN SUCCESSFUL');
                   self.$parent.loggedIn = true;
                } else {
-                  self.showModal = true;
+                  if(response.error){
+                     if(response.error = 'wrong_password'){
+                        console.log('wrong password');
+                     } else if(response.error = 'inexistent_user'){
+                        self.showModal = true;
+                     }
+                  } else {
+                  }
+                  console.log('This should never be reached');
                }
             });
 

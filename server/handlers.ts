@@ -1,8 +1,9 @@
 import * as Constants from './constants';
 import {PhosphorMessage, PhosphorErrorMessage, PhosphorErrorType, PhosphorResponse} from './types';
 import {en_US as locale} from './locale';
-import {validateType} from './functions';
+import {validateType, hash} from './functions';
 import {findOne, insertOne} from './db';
+
 
 //defines the shape of received user data for logins and registering
 const UserDataValidator = {
@@ -40,7 +41,9 @@ export async function handleLogin(msg :PhosphorMessage){
       })
 
       if(user != null){
-         if(user[Constants.db.PASSWORD_FIELD] == data.password){
+         const hashedPassword = user[Constants.db.PASSWORD_FIELD];
+         const salt = hashedPassword.split(':')[0];
+         if(hashedPassword == hash(data.password, salt)){
             return PhosphorResponse(msg, {
                result: true
             })
@@ -52,7 +55,6 @@ export async function handleLogin(msg :PhosphorMessage){
          return handleError(Constants.err.INEXISTENT_USER)
       }
 
-      return;
    } else {
       return handleError(Constants.err.INVALID_DATA_TYPE);
    };
@@ -81,7 +83,9 @@ export async function handleRegister(msg :PhosphorMessage){
 
       if(user == null){
          // create user
-         // TODO: hash password
+         data.password = hash(data.password);
+         console.log(data);
+
          await insertOne({
             collection: Constants.db.USERS_COLLECTION,
             insert: data

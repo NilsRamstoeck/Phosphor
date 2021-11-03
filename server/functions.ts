@@ -1,3 +1,5 @@
+import {scryptSync, randomBytes, hey} from 'crypto';
+
 /**
  * validates that a given object has the exactly the same keys as a given validator
  * returns:
@@ -26,4 +28,14 @@ export function validateType(toValidate :any, validator :any) :number{
          return 0;
       }
    }
+}
+
+/**
+ * Hashes a given string
+ */
+
+export function hash(toHash :string, salt_hex? :string) :string{
+   const salt = salt_hex?Buffer.from(salt_hex, 'hex'):randomBytes(64);
+   const hashed = scryptSync(toHash, salt, 64);
+   return `${salt.toString('hex')}:${hashed.toString('hex')}`;
 }
