@@ -1,14 +1,31 @@
-/// MESSAGE CONSTANTS ///
-export const LOGIN_ACTION = 'login';
-export const MESSAGE_ACTION = 'message';
+/// ACTION CONSTANTS ///
+export const action = {
+   LOGIN_ACTION: 'login',
+   MESSAGE_ACTION: 'message',
+   REGISTER_ACTION: 'register'
+}
 
 /// ERROR CONSTANTS //
-export const PARSING_ERROR = 'parsing_error';
-export const NO_ACTION = 'no_action';
-export const UNKNOWN_ACTION = 'unknown_action';
-export const INVALID_ACTION = 'invalid_action';
-export const NO_DATA = 'no_data';
-export const INVALID_DATA_TYPE = 'invalid_data_type';
-export const MISSING_LOGIN_DETAIL_ERROR = 'missing_login_detail';
-export const INVALID_USERNAME = 'invalid_username';
-export const INVALID_PASSWORD = 'invalid_password';
+export const err = {
+   PARSING_ERROR: 'parsing_error',
+   NO_ACTION: 'no_action',
+   UNKNOWN_ACTION: 'unknown_action',
+   INVALID_ACTION: 'invalid_action',
+   NO_DATA: 'no_data',
+   INVALID_DATA_TYPE: 'invalid_data_type',
+   MISSING_LOGIN_DETAIL_ERROR: 'missing_login_detail',
+   INVALID_USERNAME: 'invalid_username',
+   INVALID_PASSWORD: 'invalid_password',
+
+   WRONG_DETAILS: 'wrong_password',
+   INEXISTENT_USER: 'inexistent_user',
+   EXISTENT_USER: 'existent_user',
+}
+
+
+/// DATABASE CONSTANTS ///
+export const db = {
+   USERS_COLLECTION: 'users',
+   USERNAME_FIELD: 'username',
+   PASSWORD_FIELD: 'password',
+}
