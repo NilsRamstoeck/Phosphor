@@ -66,9 +66,9 @@
                   self.$parent.loggedIn = true;
                } else {
                   if(response.error){
-                     if(response.error = 'wrong_password'){
+                     if(response.error == 'wrong_password'){
                         console.log('wrong password');
-                     } else if(response.error = 'inexistent_user'){
+                     } else if(response.error == 'inexistent_user'){
                         self.showModal = true;
                      }
                   } else {
