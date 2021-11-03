@@ -1,0 +1,21 @@
+.modal .modal-wrapper .modal-content{
+   --modal-width: 30vw;
+   background: var(--background);
+   border-radius: 5px;
+   padding: 0 1em 1em 1em;
+   width: var(--modal-width);
+}
+
+//tablets
+@media (max-width: 850px){
+   .modal .modal-wrapper .modal-content{
+      --modal-width: 60vw;
+   }
+}
+
+@media (max-width: 425px){
+   .modal .modal-wrapper .modal-content{
+      --modal-width: 85vw;
+      padding: 0 .5em .5em .5em;
+   }
+}

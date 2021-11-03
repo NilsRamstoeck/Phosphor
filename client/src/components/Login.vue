@@ -15,21 +15,34 @@
          </form>
 
       </div>
+      <modal v-if="showModal" class="register-modal">
+         <h1 slot=header>Register</h1>
+         <div slot=content>
+            <p>
+               No user is associated with that username. Would you like to register?
+            </p>
+         </div>
+         <span slot=footer>
+            <button class="modal-btn" @click="showModal = false" type="button" >Cancel</button>
+            <button class="modal-btn" @click="register" type="button" >Register</button>
+         </span>
+      </modal>
    </div>
 </template>
 
 <script>
    import {post} from 'functions';
+   import Modal from './Modal';
 
    export default {
       name: 'Login',
-      components: {},
+      components: {Modal},
       props: {
 
       },
       data: function(){
          return {
-
+            showModal: false
          }
       },
       methods: {
@@ -41,14 +54,46 @@
                data[entry[0]] = entry[1];
             }
 
+            const self = this;
+
             post('login', {
                username: data.username,
                password: data.password
             })
-            .then((res) => {
-               console.log(res);
+            .then(response => {
+               if(response.result){
+                  console.log('LOGIN SUCCESSFUL');
+                  self.$parent.loggedIn = true;
+               } else {
+                  self.showModal = true;
+               }
             });
+
             e.preventDefault();
+         },
+         register: async function(){
+            const form = new FormData(document.querySelector('.login-form'));
+            const data = {};
+
+            for(const entry of form){
+               data[entry[0]] = entry[1];
+            }
+
+            const response = await post('register', {
+               username: data.username,
+               password: data.password
+            });
+
+            const self = this;
+
+            if(response.result){
+               console.log('Register SUCCESSFUL');
+               self.showModal = false;
+               self.$parent.loggedIn = true;
+            } else {
+               console.log('Something went wrong');
+            }
+
          }
       },
       mounted: function () {

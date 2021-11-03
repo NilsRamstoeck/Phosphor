@@ -5,7 +5,7 @@
 </template>
 
 <script>
-   import Login from './Login.vue'
+   import Login from './Login';
    export default{
       name: 'App',
       components: {Login},
