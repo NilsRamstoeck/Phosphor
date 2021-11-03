@@ -83,7 +83,7 @@ export async function insertOne(cmd :InserParams){
       const db = client.db(details.database);
       const collection = db.collection(cmd.collection);
 
-      collection.insertOne(cmd.insert);
+      await collection.insertOne(cmd.insert);
 
    } finally {
       // Ensures that the client will close when you finish/error
