@@ -1,4 +1,6 @@
 import 'regenerator-runtime/runtime';
+import {BinaryLike, createHash, generateKeyPairSync} from 'crypto-browserify';
+import forge from 'node-forge'
 
 export async function post (action, data) {
    const msg = {
@@ -21,4 +23,37 @@ export async function post (action, data) {
    return response;
 }
 
-window.post = post;
+export async function generateKey(pass){
+   const hash = createHash('sha512')
+   .update(pass)
+   .digest();
+
+   // const seed = scryptSync(pass, hash, 64);
+   let prng = await import('node-forge/lib/random');
+
+   prng.seedFileSync = function(needed){
+      let buf = [];
+      for(let i = 0; i > needed; i++)buf.push(hash[i]);
+      return buf;
+   }
+
+   const {privateKey, publicKey} = forge.rsa.generateKeyPair({
+      bits: 1024,
+      e: 65537,
+      prng: prng,
+      algorithm: 'PRIMEINC'
+   });
+
+   console.log(forge.pki.privateKeyToPem(privateKey));
+   console.log(forge.pki.publicKeyToPem(publicKey));
+
+}
+
+export function handleError(error){
+   switch(error.error){
+      case 'inexistent_user':
+      const register_event = new Event('register_event');
+      document.dispatchEvent(register_event);
+      break;
+   }
+}

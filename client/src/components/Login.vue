@@ -31,7 +31,7 @@
 </template>
 
 <script>
-   import {post} from 'functions';
+   import {post, handleError} from 'functions';
    import Modal from './Modal';
 
    export default {
@@ -46,40 +46,17 @@
          }
       },
       methods: {
-         onSubmit: function (e) {
-            const form = new FormData(e.target);
-            const data = {};
-
-            for(const entry of form){
-               data[entry[0]] = entry[1];
-            }
-
-            const self = this;
-
-            post('login', {
-               username: data.username,
-               password: data.password
-            })
-            .then(response => {
-               if(response.result){
-                  console.log('LOGIN SUCCESSFUL');
-                  self.$parent.loggedIn = true;
-               } else {
-                  if(response.error){
-                     if(response.error == 'wrong_password'){
-                        console.log('wrong password');
-                     } else if(response.error == 'inexistent_user'){
-                        self.showModal = true;
-                     }
-                  } else {
-                  }
-                  console.log('This should never be reached');
-               }
-            });
-
+         onSubmit: async function (e) {
             e.preventDefault();
+
+            const response = await this.handlePost('login');
+            this.handleResponse(response);
          },
          register: async function(){
+            const response = await this.handlePost('register');
+            this.handleResponse(response);
+         },
+         handlePost: async function (type) {
             const form = new FormData(document.querySelector('.login-form'));
             const data = {};
 
@@ -87,24 +64,39 @@
                data[entry[0]] = entry[1];
             }
 
-            const response = await post('register', {
+            return await post(type, {
                username: data.username,
                password: data.password
             });
 
-            const self = this;
-
-            if(response.result){
-               console.log('Register SUCCESSFUL');
-               self.showModal = false;
-               self.$parent.loggedIn = true;
+         },
+         handleResponse: function(response) {
+            if(response && response.result){
+               switch(response.action){
+                  case 'login':
+                  case 'register':
+                  this.showModal = false;
+                  this.$parent.loggedIn = true;
+                  break;
+                  case null:
+                  case undefined:
+                  default:
+                  console.error('Nonsensical Server Response:', response);
+               }
             } else {
-               console.log('Something went wrong');
+               handleError(response);
             }
-
+         },
+         registerEventHandler: function () {
+            this.showModal = true;
+            console.log('receive');
          }
       },
       mounted: function () {
+         document.addEventListener('register_event', this.registerEventHandler);
+      },
+      beforeDestroy: function () {
+         document.removeEventListener('register_event', this.registerEventHandler);
       }
    }
 </script>
