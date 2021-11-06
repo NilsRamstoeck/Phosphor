@@ -1,5 +1,3 @@
 # TODO
 
-[x] hash password
-[x] create session ID
-[] validate client on action
+[] figure out how to connect 2 peers
