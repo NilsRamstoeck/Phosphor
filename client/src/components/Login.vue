@@ -3,7 +3,7 @@
       <div class="login-wrapper">
 
          <h1 class="login" slot="header">LOGIN</h1>
-         <form class="login login-form" method="post" @submit="onSubmit" slot="content">
+         <form class="login login-form" method="post" @submit="login" slot="content">
 
             <input class="login" type="text" name="username" placeholder="Username" required>
             <br>
@@ -31,8 +31,15 @@
 </template>
 
 <script>
-   import {post, handleError} from 'functions';
    import Modal from './Modal';
+   import {
+      post,
+      handleError,
+      generateKeyPair,
+      signMessage,
+      verifySignedMessage,
+      convertToPem
+   } from 'functions';
 
    export default {
       name: 'Login',
@@ -46,43 +53,54 @@
          }
       },
       methods: {
-         onSubmit: async function (e) {
+         login: function (e) {
             e.preventDefault();
+            const self = this;
+            setTimeout(async function () {
 
-            const response = await this.handlePost('login');
-            this.handleResponse(response);
+               const data = self.getFormData();
+               const {privateKey} = await generateKeyPair(data);
+               const msg = signMessage(data.username, privateKey);
+
+               const response = await post('login', {
+                  msg
+               });
+
+               await self.handleResponse(response);
+            }, 500);
          },
-         register: async function(){
-            const response = await this.handlePost('register');
-            this.handleResponse(response);
+         register: function(){
+            const self = this;
+            setTimeout(async function () {
+
+               const data = self.getFormData();
+               const {publicKey, privateKey} = await generateKeyPair(data);
+
+               const msg = signMessage(data.username, privateKey);
+               const pem = convertToPem({privateKey, publicKey});
+
+               const response = await post('register', {
+                  msg,
+                  publicKey: pem.publicKey
+               });
+
+               await self.handleResponse(response);
+            }, 500);
          },
-         handlePost: async function (type) {
+         getFormData : function() {
             const form = new FormData(document.querySelector('.login-form'));
-            const data = {};
 
+            let data = {};
             for(const entry of form){
                data[entry[0]] = entry[1];
             }
 
-            return await post(type, {
-               username: data.username,
-               password: data.password
-            });
-
+            return data;
          },
-         handleResponse: function(response) {
+         handleResponse: async function(response) {
             if(response && response.result){
-               switch(response.action){
-                  case 'login':
-                  case 'register':
-                  this.showModal = false;
-                  this.$parent.loggedIn = true;
-                  break;
-                  case null:
-                  case undefined:
-                  default:
-                  console.error('Nonsensical Server Response:', response);
-               }
+               this.showModal = false;
+               this.$parent.loggedIn = true;
             } else {
                handleError(response);
             }

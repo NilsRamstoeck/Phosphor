@@ -83,7 +83,8 @@ export async function find(cmd :FindParams) :Promise<Document>{
 }
 
 
-export async function insertOne(cmd :InserParams){
+export async function insertOne(cmd :InserParams) :Promise<Boolean>{
+   let result = false;
    try {
       // Connect the client to the server
       await client.connect();
@@ -91,12 +92,12 @@ export async function insertOne(cmd :InserParams){
       const db = client.db(details.database);
       const collection = db.collection(cmd.collection);
 
-      await collection.insertOne(cmd.insert);
-
+      result = (await collection.insertOne(cmd.insert)).acknowledged;
    } finally {
       // Ensures that the client will close when you finish/error
       await client.close();
    }
+   return result;
 }
 
 export async function updateOne(cmd :UpdateParams){

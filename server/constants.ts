@@ -1,10 +1,3 @@
-/// ACTION CONSTANTS ///
-export const action = {
-   LOGIN_ACTION: 'login',
-   MESSAGE_ACTION: 'message',
-   REGISTER_ACTION: 'register'
-}
-
 /// ERROR CONSTANTS //
 export const err = {
    PARSING_ERROR: 'parsing_error',
@@ -17,7 +10,7 @@ export const err = {
    INVALID_USERNAME: 'invalid_username',
    INVALID_PASSWORD: 'invalid_password',
 
-   WRONG_DETAILS: 'wrong_password',
+   WRONG_DETAILS: 'wrong_details',
    INEXISTENT_USER: 'inexistent_user',
    EXISTENT_USER: 'existent_user',
 }
@@ -28,4 +21,5 @@ export const db = {
    USERS_COLLECTION: 'users',
    USERNAME_FIELD: 'username',
    PASSWORD_FIELD: 'password',
+   PUBKEY_FIELD: 'public_key',
 }

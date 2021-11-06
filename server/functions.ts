@@ -1,14 +1,22 @@
-import {scryptSync, randomBytes, createHash} from 'crypto';
-import { PhosphorSession } from './types';
+import { PhosphorSession, SignedMessage } from './types';
+import {
+   scryptSync,
+   randomBytes,
+   createHash,
+   createPublicKey,
+   createVerify,
+   sign,
+   generateKeyPairSync,
+} from 'crypto';
 
 /**
- * validates that a given object has the exactly the same keys as a given validator
- * returns:
- * -1   : object is missing keys
- *  0   : object has all required keys
- *  1   : object has all required keys + extra keys
- *
- */
+* validates that a given object has the exactly the same keys as a given validator
+* returns:
+* -1   : object is missing keys
+*  0   : object has all required keys
+*  1   : object has all required keys + extra keys
+*
+*/
 export function validateType(toValidate :any, validator :any) :number{
    if(toValidate == undefined || toValidate == null || validator == undefined || validator == null){
       return -1;
@@ -32,8 +40,8 @@ export function validateType(toValidate :any, validator :any) :number{
 }
 
 /**
- * Hashes a given string
- */
+* Hashes a given string
+*/
 export function hash(toHash :string, salt_hex? :string) :string{
    const salt = salt_hex?Buffer.from(salt_hex, 'hex'):randomBytes(64);
    const hashed = scryptSync(toHash, salt, 64);
@@ -41,8 +49,8 @@ export function hash(toHash :string, salt_hex? :string) :string{
 }
 
 /**
- * Generates a new Session
- */
+* Generates a new Session
+*/
 export function generateSession(user :string) :PhosphorSession{
    const session_id = createHash('sha256')
    .update(randomBytes(32))
@@ -57,4 +65,15 @@ export function generateSession(user :string) :PhosphorSession{
 export function validateSession(sessionID :string, session :PhosphorSession){
    const salt = session.session_id.split(':')[0];
    return hash(sessionID, salt) == session.session_id;
+}
+
+export function verifySignedMessage(msg :SignedMessage, key :string){
+   const {raw} = msg;
+   const signature = Buffer.from(msg.signature, 'base64');
+   const publicKey = createPublicKey(key);
+   const verify = createVerify('sha256')
+   verify.write(raw);
+   verify.end();
+
+   return verify.verify(publicKey, signature);
 }

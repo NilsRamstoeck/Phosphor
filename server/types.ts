@@ -1,11 +1,5 @@
 import * as Constants from "./constants";
 
-/// DEFINE ACTION TYPE //
-export type PhosphorAction =
-typeof Constants.action.LOGIN_ACTION |
-typeof Constants.action.MESSAGE_ACTION
-;
-
 /// DEFINE ERROR TYPE ///
 export type PhosphorErrorType =
 typeof Constants.err.PARSING_ERROR |
@@ -19,11 +13,16 @@ typeof Constants.err.INVALID_PASSWORD |
 typeof Constants.err.MISSING_LOGIN_DETAIL_ERROR
 ;
 
+export interface SignedMessage{
+   raw: string,
+   hash: string,
+   signature: string
+}
+
 // Interface for incoming messages
 export interface PhosphorMessage{
    timestamp: string,
-   action: PhosphorAction,
-   data: object
+   data: any
 }
 
 // Interface for incoming messages
@@ -68,21 +67,19 @@ export function PhosphorErrorMessage(template:PhosphorErrorMessageTemplate) :Pho
 
 //Template
 interface PhosphorResponseTemplate{
-   result: boolean,
    data?: object
 }
 
 export interface PhosphorResponse extends PhosphorResponseTemplate{
-   action: string,
    timestamp: string;
+   result: true,
 }
 
-export function PhosphorResponse(msg:PhosphorMessage, template:PhosphorResponseTemplate) :PhosphorResponse {
+export function PhosphorResponse(template:PhosphorResponseTemplate) :PhosphorResponse {
    const res :PhosphorResponse = {
       timestamp: new Date().toISOString(),
-      action: msg.action,
-      result: template.result,
-      data: template.data
+      data: template.data,
+      result: true
    }
    return res;
 }

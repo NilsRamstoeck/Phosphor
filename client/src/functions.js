@@ -1,15 +1,18 @@
 import 'regenerator-runtime/runtime';
-import {BinaryLike, createHash, generateKeyPairSync} from 'crypto-browserify';
+import {BinaryLike, createHash} from 'crypto-browserify';
 import forge from 'node-forge'
+
+const Binary = forge.util.binary;
+
+window.forge = forge;
 
 export async function post (action, data) {
    const msg = {
       timestamp: (new Date()).toISOString(),
-      action: action,
       data
    }
 
-   const response = await fetch(`http://${window.location.hostname}:2222`, {
+   const response = await fetch(`http://${window.location.hostname}:2222/${action}`, {
       method: 'post',
       headers: {
          "Content-Type": "application/json"
@@ -23,30 +26,59 @@ export async function post (action, data) {
    return response;
 }
 
-export async function generateKey(pass){
+export async function generateKeyPair(data){
+   const {username, password} =  data;
    const hash = createHash('sha512')
-   .update(pass)
+   .update(password)
+   .update(username)
    .digest();
-
    // const seed = scryptSync(pass, hash, 64);
-   let prng = await import('node-forge/lib/random');
-
+   let prng = forge.random.createInstance();
    prng.seedFileSync = function(needed){
-      let buf = [];
-      for(let i = 0; i > needed; i++)buf.push(hash[i]);
-      return buf;
+      var b = forge.util.createBuffer();
+      for(let i = 0; i < needed; i++){
+         b.putByte(hash[i % hash.length]);
+      }
+      return b.getBytes();
    }
-
-   const {privateKey, publicKey} = forge.rsa.generateKeyPair({
+   window.prng = prng;
+   return forge.rsa.generateKeyPair({
       bits: 1024,
       e: 65537,
       prng: prng,
       algorithm: 'PRIMEINC'
    });
+   console.log('gen');
+}
 
-   console.log(forge.pki.privateKeyToPem(privateKey));
-   console.log(forge.pki.publicKeyToPem(publicKey));
+export function signMessage(raw, privateKey){
+   const md = forge.md.sha256.create();
+   md.update(raw, 'utf8');
+   const hash =  Buffer.from(Binary.raw.decode(md.digest().bytes())).toString('base64');
+   const signature = Buffer.from(Binary.raw.decode(privateKey.sign(md))).toString('base64');
+   return {raw: raw, hash, signature};
+}
 
+export function verifySignedMessage(msg, publicKey){
+   const raw = msg.raw;
+   const hash = Binary.raw.encode(Binary.base64.decode(msg.hash))
+   const signature = Binary.raw.encode(Binary.base64.decode(msg.signature));
+
+   const md = forge.md.sha256.create();
+   md.update(raw, 'utf8');
+   if(md.digest().bytes() == hash){
+      return publicKey.verify(hash, signature);
+   }
+   return false;
+}
+
+export function convertToPem(keyPair) {
+   const {privateKey, publicKey} = keyPair;
+   const pem = {
+      privateKey: forge.pki.privateKeyToPem(privateKey),
+      publicKey: forge.pki.publicKeyToPem(publicKey),
+   }
+   return pem;
 }
 
 export function handleError(error){
