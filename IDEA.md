@@ -8,6 +8,12 @@
    - Contact IDs have an anti spam code
 - Users can opt out of storing messages in a database
 - Users can opt out of storing messages locally
+- Users can setup their own, seperate Phosphor Server.
+- Phospor Servers can be linked, allowing communication between users in them
+   - Users log into their original Server
+   - Contacts from a different server will be stored with their server ID prefixed
+   - They will then be loaded from their server
+   - If a link is undone, contacts will be marked as such
 - E2E Encryption
 - P2P communication
 
