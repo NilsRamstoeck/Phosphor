@@ -1,7 +1,7 @@
 <template>
    <div class="message-input-wrapper">
       <div class="message-input">
-         <input @keyup.enter=sendMessage type="text" name="" v-model:value=message>
+         <input @keyup.enter=sendMessage type="text" placeholder="Type your message here..." v-model:value=message>
          <button @click=sendMessage><i class="fas fa-paper-plane"></i></button>
       </div>
    </div>
@@ -16,7 +16,7 @@
       },
       data: function() {
          return {
-            message: '',
+            message: 'Message',
 
          }
       },

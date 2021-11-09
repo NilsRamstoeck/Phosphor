@@ -56,8 +56,12 @@ export async function handleLogin(msg :PhosphorMessage){
    // TODO: replace with appropiate error
    return handleError(Constants.err.INVALID_PASSWORD);
 
-   //there is no data that needs to be returned for now
-   return PhosphorResponse({});
+
+   return PhosphorResponse({
+      data: {
+         contacts: user.contacts
+      }
+   });
 }
 
 export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResponse | PhosphorErrorMessage>{
@@ -78,12 +82,14 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
    if(!validateUsername(username))
    return handleError(Constants.err.INVALID_USERNAME);
 
-   const username_taken = (await findOne({
+   const user = await findOne({
       collection: Constants.db.USERS_COLLECTION,
       find: {
          [Constants.db.USERNAME_FIELD]: username
       }
-   })) != null;
+   });
+
+   const username_taken = user == null;
 
    if(username_taken)
    return handleError(Constants.err.EXISTENT_USER);
@@ -106,8 +112,12 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
    // TODO: replace with appropiate error
    return handleError(Constants.err.PARSING_ERROR);
 
-   //there is no data that needs to be returned for now
-   return PhosphorResponse({});
+
+   return PhosphorResponse({
+      data: {
+         contacts: user.contacts
+      }
+   });
 }
 
 export async function handleMessage(msg :PhosphorMessage) {
