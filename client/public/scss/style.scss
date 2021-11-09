@@ -5,21 +5,36 @@
    --font-body: "Arial";
    --font-size: 30px;
 
-   --color-light: #eee;
-   --color-dark: rgb(51, 51, 51);
+   --color-light-background: #fff;
+   --color-dark-background: #ddd;
+
+   --color-light-foreground: #333;
+   --color-dark-foreground: #222;
+
    --color-primary-light: #cd0000;
    --color-primary-dark: #9a0000;
 
-   --foreground: var(--color-dark);
-   --background: var(--color-light);
 
+   --color-background: var(--color-light-background);
+   --color-panel: var(--color-dark-background);
+
+   --color-foreground: var(--color-light-foreground);
+   --color-text: var(--color-dark-foreground);
 }
 
 .darkmode{
-   --foreground: var(--color-light);
-   --background: var(--color-dark);
-   --color-primary: var(--color-primary-light);
-   --color-primary-hover: var(--color-primary-dark);
+   --color-light-background: #333;
+   --color-dark-background: #222;
+
+   --color-light-foreground: #fff;
+   --color-dark-foreground: #ddd;
+
+   --color-background: var(--color-dark-background);
+   --color-panel: var(--color-light-background);
+
+   --color-foreground: var(--color-dark-foreground);
+   --color-text: var(--color-light-foreground);
+
 }
 
 body, html{
@@ -29,24 +44,25 @@ body, html{
 
 body{
    font-family: var(--font-body);
-   color: var(--foreground);
-   background: var(--background);
+   color: var(--color-text);
+   background: var(--color-background);
    font-size: var(--font-size);
 }
 
 h1,h2,h3,h4,h5,h6{
-   color: var(--color-primary);
+   color: var(--color-primary-light);
 }
 
 button{
    font-size: var(--font-size);
    float: inline-end;
-   background: var(--color-primary);
-   color: var(--color-dark);
+   background: var(--color-primary-light);
+   color: var(--color-text);
    border-radius: 5px;
    border: 0;
+   transition: 0.1s ease;
 
    &:hover{
-      background: var(--color-primary-hover);
+      background: var(--color-primary-dark);
    }
 }

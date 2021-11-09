@@ -1,0 +1,35 @@
+.message-input-wrapper{
+}
+
+.message-input{
+   width: max-content;
+   margin: 0 auto;
+}
+
+.message-input input{
+   width: clamp(300px, calc(90vw - 400px), 550px);
+   height: 40px;
+   border: none;
+   outline: none;
+   padding-left: 5px;
+   padding-top: 0;
+   padding-bottom: 0;
+   font-size: 16px;
+   border-radius: 5px 0 0 5px;
+   background: var(--color-panel);
+   color: var(--color-foreground);
+}
+
+.message-input button{
+   height: 40px;
+   font-size: 18px;
+   border: none;
+   outline: none;
+   color: white;
+   cursor: pointer;
+   aspect-ratio: 1/1;
+   border-radius: 0 5px 5px 0;
+}
+
+.message-input button:hover{
+}

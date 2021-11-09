@@ -59,7 +59,7 @@
             setTimeout(async function () {
 
                const data = self.getFormData();
-               const {privateKey} = await generateKeyPair(data);
+               const {publicKey, privateKey} = await generateKeyPair(data);
                const msg = signMessage(data.username, privateKey);
 
                const response = await post('login', {
@@ -67,6 +67,13 @@
                });
 
                await self.handleResponse(response);
+
+               /// ONLY FOR TESTING ///
+               const pem = convertToPem({privateKey, publicKey});
+               localStorage.setItem('privateKey', pem.privateKey);
+               localStorage.setItem('username', data.username);
+               ////////////////////////
+
             }, 500);
          },
          register: function(){
@@ -78,7 +85,6 @@
 
                const msg = signMessage(data.username, privateKey);
                const pem = convertToPem({privateKey, publicKey});
-
                const response = await post('register', {
                   msg,
                   publicKey: pem.publicKey
@@ -101,6 +107,7 @@
             if(response && response.result){
                this.showModal = false;
                this.$parent.loggedIn = true;
+               window.privateKey = (await generateKeyPair(this.getFormData())).privateKey;
             } else {
                handleError(response);
             }
@@ -112,6 +119,21 @@
       },
       mounted: function () {
          document.addEventListener('register_event', this.registerEventHandler);
+
+         /// ONLY FOR TESTING ///
+         const self = this;
+         const privateKey = localStorage.getItem('privateKey');
+         if(privateKey){
+            const msg = signMessage(localStorage.getItem('username'), forge.pki.privateKeyFromPem(privateKey));
+
+            post('login', {
+               msg
+            }).then(response => {
+               self.handleResponse(response);
+            });
+         }
+         //////////////////////////////
+
       },
       beforeDestroy: function () {
          document.removeEventListener('register_event', this.registerEventHandler);
