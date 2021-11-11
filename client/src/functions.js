@@ -89,3 +89,29 @@ export function handleError(error){
       break;
    }
 }
+
+export function loadMessages(name){
+   console.log('msg');
+   return [
+      {
+         sender: name,
+         content: 'Hello',
+         timestamp:  new Date().toLocaleString().split(' ')[1]
+      },
+      {
+         sender: name,
+         content: 'How are you?',
+         timestamp:  new Date().toLocaleString().split(' ')[1]
+      },
+      {
+         sender: localStorage.username,
+         content: 'I\'m good',
+         timestamp:  new Date().toLocaleString().split(' ')[1]
+      },
+      {
+         sender: localStorage.username,
+         content: 'This is just a layout test though :)',
+         timestamp:  new Date().toLocaleString().split(' ')[1]
+      },
+   ]
+}

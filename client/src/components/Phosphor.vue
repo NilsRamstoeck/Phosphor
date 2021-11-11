@@ -2,7 +2,8 @@
    <div class="phosphor">
       <contacts :contacts=contacts></contacts>
       <div class="chat-wrapper">
-         <messages></messages>
+         <chat-header></chat-header>
+         <messages :target=target></messages>
          <message-input></message-input>
       </div>
    </div>
@@ -12,10 +13,11 @@
    import MessageInput from './MessageInput';
    import Messages from './Messages';
    import Contacts from './Contacts';
+   import ChatHeader from './ChatHeader';
 
    export default {
       name: 'phosphor',
-      components: {MessageInput, Messages, Contacts},
+      components: {MessageInput, Messages, Contacts, ChatHeader},
       props: {
          contacts: {
             type: Array,
@@ -24,7 +26,7 @@
       },
       data: function() {
          return {
-
+            target: {}
          }
       },
       methods: {

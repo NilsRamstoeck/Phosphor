@@ -1,4 +1,24 @@
-.messages{
-   height: 90%;
-   margin-bottom: 30px;
+.message-list{
+   height: 85%;
+   margin-top: 1rem;
+}
+
+.message-wrapper{
+   margin-bottom: 0.5rem;
+}
+
+.message {
+   margin-left: 1rem;
+}
+
+.message > .sender{
+   color: var(--color-primary-light);
+}
+
+.message > .content{
+   font-size: 1.45rem;
+}
+
+.message > .timestamp{
+   font-size: 1rem;
 }

@@ -17,6 +17,7 @@
 
    --color-background: var(--color-light-background);
    --color-panel: var(--color-dark-background);
+   --color-panel-hover: #aaa;
 
    --color-foreground: var(--color-light-foreground);
    --color-text: var(--color-dark-foreground);
@@ -31,6 +32,8 @@
 
    --color-background: var(--color-dark-background);
    --color-panel: var(--color-light-background);
+   --color-panel-hover: #444;
+
 
    --color-foreground: var(--color-dark-foreground);
    --color-text: var(--color-light-foreground);

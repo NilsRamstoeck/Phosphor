@@ -1,4 +1,4 @@
-.contacts{
+.contact-list{
    /* position: absolute;
    left: 0;
    top: 0;
@@ -9,5 +9,11 @@
 
 .contact{
    color: var(--color-primary-light);
-   margin: 20px 0 0 20px;
+   margin: 20px 0;
+   padding: 20px 20px;
+}
+
+.contact.active,
+.contact:hover{
+   background: var(--color-panel-hover);
 }

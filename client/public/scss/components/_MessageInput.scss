@@ -1,4 +1,8 @@
 .message-input-wrapper{
+   position: absolute;
+   left: 0;
+   right: 0;
+   bottom: 20px;
 }
 
 .message-input{
@@ -29,6 +33,7 @@
    cursor: pointer;
    aspect-ratio: 1/1;
    border-radius: 0 5px 5px 0;
+   padding: 0;
 }
 
 .message-input button:hover{
