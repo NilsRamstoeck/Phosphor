@@ -89,7 +89,7 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
       }
    });
 
-   const username_taken = user == null;
+   const username_taken = user != null;
 
    if(username_taken)
    return handleError(Constants.err.EXISTENT_USER);
