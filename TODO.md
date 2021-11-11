@@ -1,6 +1,7 @@
 # TODO
 
 - [x] figure out how to connect 2 peers
+- [ ] setup WS server
 - [ ] setup WS connection
 - [ ] setup WebRTC
 - [ ] send first message
