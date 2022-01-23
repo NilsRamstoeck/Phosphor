@@ -9,7 +9,7 @@
 </template>
 
 <script>
-   import {loadMessages} from '../functions.js';
+   import {loadMessages} from 'functions';
    export default {
       name: 'contacts',
       props: {

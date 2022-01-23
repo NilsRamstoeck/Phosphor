@@ -12,7 +12,7 @@ export async function post (action, data) {
       data
    }
 
-   const response = await fetch(`http://${window.location.hostname}:2222/${action}`, {
+   const response = await fetch(`http://localhost:2222/${action}`, {
       method: 'post',
       headers: {
          "Content-Type": "application/json"

@@ -3,8 +3,7 @@ import {en_US as locale} from './locale';
 
 import {
    findOne,
-   insertOne,
-   updateOne
+   insertOne
 } from './db';
 
 import {
@@ -119,15 +118,6 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
       }
    });
 }
-
-export async function handleMessage(msg :PhosphorMessage) {
-   // TODO: IMPLEMENT
-   return {
-      msg: msg,
-      err: "Not Implemented"
-   }
-}
-
 
 export function handleError(error :PhosphorErrorType) :PhosphorErrorMessage{
    const err_msg :PhosphorErrorMessage = PhosphorErrorMessage({

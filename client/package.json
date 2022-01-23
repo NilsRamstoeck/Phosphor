@@ -1,0 +1,43 @@
+{
+   "name": "phosphor-client",
+   "version": "1.0.0",
+   "description": "Phosphor Chat client",
+   "scripts": {
+      "dev": "npm-run-all --parallel tsc parcel",
+      "tsc": "tsc -w",
+      "parcel": "parcel watch renderer/public/*.html --public-url . --out-dir ./dist/client",
+      "start": "electron ./dist/client/main.js"
+   },
+   "//": {
+      "vue.js": "development",
+      "vue.common.js": "production"
+   },
+   "alias": {
+      "functions": "./renderer/src/functions.js",
+      "vue": "./node_modules/vue/dist/vue.js"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/NilsRamstoeck/Phosphor.git"
+   },
+   "author": "Nils Ramstöck",
+   "license": "GPL-3.0",
+   "bugs": {
+      "url": "https://github.com/NilsRamstoeck/Phosphor/issues"
+   },
+   "homepage": "https://github.com/NilsRamstoeck/Phosphor#readme",
+   "dependencies": {
+      "functions": "^1.0.9",
+      "vue": "^2.6.14",
+      "vue-hot-reload-api": "^2.3.4"
+   },
+   "devDependencies": {
+      "@vue/component-compiler-utils": "^3.3.0",
+      "electron": "^16.0.7",
+      "npm-run-all": "^4.1.5",
+      "parcel-bundler": "^1.12.5",
+      "sass": "^1.49.0",
+      "typescript": "^4.4.4",
+      "vue-template-compiler": "^2.6.14"
+   }
+}

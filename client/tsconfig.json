@@ -1,0 +1,9 @@
+{
+   "include": ["src/*", "src/**/*"],
+   "compilerOptions": {
+      "module": "commonjs",
+      "target": "ES5",
+      "outDir": "./dist/client",
+      "esModuleInterop": true
+   }
+}
