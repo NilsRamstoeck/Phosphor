@@ -16,7 +16,7 @@
       },
       data: function() {
          return {
-            message: 'Message',
+            message: '',
 
          }
       },
