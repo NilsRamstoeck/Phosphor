@@ -5,7 +5,7 @@
    "scripts": {
       "dev": "npm-run-all --parallel tsc parcel",
       "tsc": "tsc -w",
-      "parcel": "parcel watch renderer/public/*.html --public-url . --out-dir ./dist/client --no-hmr",
+      "parcel": "parcel watch renderer/public/*.html --public-url . --out-dir ./dist/client --no-hmr --no-source-maps",
       "start": "electron ./dist/client/main.js"
    },
    "//": {
@@ -27,6 +27,7 @@
    },
    "homepage": "https://github.com/NilsRamstoeck/Phosphor#readme",
    "dependencies": {
+      "@types/node-forge": "^1.0.0",
       "functions": "^1.0.9",
       "vue": "^2.6.14",
       "vue-hot-reload-api": "^2.3.4"
@@ -34,6 +35,7 @@
    "devDependencies": {
       "@vue/component-compiler-utils": "^3.3.0",
       "electron": "^16.0.7",
+      "electron-reloader": "^1.2.1",
       "npm-run-all": "^4.1.5",
       "parcel-bundler": "^1.12.5",
       "sass": "^1.49.0",
