@@ -7,4 +7,4 @@ contextBridge.exposeInMainWorld('theme', {
   onupdated: (handler: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => ipcRenderer.on('theme-updated', handler),
 })
 
-contextBridge.exposeInMainWorld('crypto', crypto);
+contextBridge.exposeInMainWorld('pcrypt', crypto);

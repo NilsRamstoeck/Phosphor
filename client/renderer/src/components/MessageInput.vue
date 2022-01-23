@@ -8,7 +8,7 @@
 </template>
 
 <script>
-   import {post, signMessage} from '../functions';
+   import {post} from '../functions';
    export default {
       name: 'message-input',
       props: {
@@ -22,7 +22,7 @@
       },
       methods: {
          sendMessage: async function () {
-            const msg = signMessage(this.message, window.privateKey);
+            const msg = pcrypt.signMessage(this.message, window.privateKey);
          }
       },
    }

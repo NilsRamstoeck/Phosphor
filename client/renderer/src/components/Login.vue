@@ -35,10 +35,6 @@
    import {
       post,
       handleError,
-      generateKeyPair,
-      signMessage,
-      verifySignedMessage,
-      convertToPem
    } from 'functions';
 
    export default {
@@ -59,8 +55,8 @@
             setTimeout(async function () {
 
                const data = self.getFormData();
-               const {publicKey, privateKey} = await generateKeyPair(data);
-               const msg = signMessage(data.username, privateKey);
+               const {publicKey, privateKey} = await pcrypt.generateKeyPair(data);
+               const msg = pcrypt.signMessage(data.username, privateKey);
 
                const response = await post('login', {
                   msg
@@ -69,7 +65,7 @@
                await self.handleResponse(response);
 
                /// ONLY FOR TESTING ///
-               const pem = convertToPem({privateKey, publicKey});
+               const pem = pcrypt.convertToPem({privateKey, publicKey});
                localStorage.setItem('privateKey', pem.privateKey);
                localStorage.setItem('username', data.username);
                ////////////////////////
@@ -81,10 +77,10 @@
             setTimeout(async function () {
 
                const data = self.getFormData();
-               const {publicKey, privateKey} = await generateKeyPair(data);
+               const {publicKey, privateKey} = await pcrypt.generateKeyPair(data);
 
-               const msg = signMessage(data.username, privateKey);
-               const pem = convertToPem({privateKey, publicKey});
+               const msg = pcrypt.signMessage(data.username, privateKey);
+               const pem = pcrypt.convertToPem({privateKey, publicKey});
                const response = await post('register', {
                   msg,
                   publicKey: pem.publicKey
@@ -109,7 +105,7 @@
                this.showModal = false;
                this.$parent.loggedIn = true;
                this.$parent.contacts = response.data.contacts.map(name => {return {name, status}});
-               window.privateKey = (await generateKeyPair(this.getFormData())).privateKey;
+               window.privateKey = (await pcrypt.generateKeyPair(this.getFormData())).privateKey;
             } else {
                handleError(response);
             }
@@ -126,7 +122,7 @@
          const self = this;
          const privateKey = localStorage.getItem('privateKey');
          if(privateKey){
-            const msg = signMessage(localStorage.getItem('username'), forge.pki.privateKeyFromPem(privateKey));
+            const msg = pcrypt.signMessage(localStorage.getItem('username'), pcrypt.privateKeyFromPem(privateKey));
 
             post('login', {
                msg
