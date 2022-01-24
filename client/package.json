@@ -5,7 +5,7 @@
    "scripts": {
       "dev": "npm-run-all --parallel tsc parcel",
       "tsc": "tsc -w",
-      "parcel": "parcel watch renderer/public/*.html --public-url . --out-dir ./dist/client --no-hmr --no-source-maps",
+      "parcel": "parcel watch renderer/public/*.html --public-url . --out-dir ./dist/client --no-hmr",
       "start": "electron ./dist/client/main.js"
    },
    "//": {

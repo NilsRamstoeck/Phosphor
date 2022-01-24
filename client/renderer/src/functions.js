@@ -9,7 +9,7 @@ window.forge = forge;
 export async function post (action, data) {
    const msg = {
       timestamp: (new Date()).toISOString(),
-      data
+      data: data
    }
 
    const response = await fetch(`http://localhost:2222/${action}`, {
@@ -79,6 +79,15 @@ export function convertToPem(keyPair) {
       publicKey: forge.pki.publicKeyToPem(publicKey),
    }
    return pem;
+}
+
+export function convertFromPem(pem) {
+   const {privateKey, publicKey} = pem;
+   const keyPair = {
+      privateKey: forge.pki.privateKeyFromPem(privateKey),
+      publicKey: forge.pki.publicKeyFromPem(publicKey),
+   }
+   return keyPair;
 }
 
 export function handleError(error){

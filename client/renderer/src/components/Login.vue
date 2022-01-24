@@ -5,13 +5,9 @@
          <h1 class="login" slot="header">LOGIN</h1>
          <form class="login login-form" method="post" @submit="login" slot="content">
 
-            <input class="login" type="text" name="username" placeholder="Username" required value="Phospor">
+            <input class="login" type="text" name="username" placeholder="Username" required>
             <br>
-
-            <!-- TESTING -->
-            <input class="login" type="password" name="password" placeholder="Password" required-when-not-testing>
-            <!--         -->
-
+            <input class="login" type="password" name="password" placeholder="Password" required>
             <br>
 
             <button v-if="true" class="login" type="submit" name="submit">Log In</button>
@@ -42,7 +38,8 @@
       generateKeyPair,
       signMessage,
       verifySignedMessage,
-      convertToPem
+      convertToPem,
+      convertFromPem,
    } from 'functions';
 
    export default {
@@ -53,7 +50,9 @@
       },
       data: function(){
          return {
-            showModal: false
+            showModal: false,
+            signedUsername: null,
+            keypair: null,
          }
       },
       methods: {
@@ -66,27 +65,16 @@
 
                console.log(data);
 
-               //TESTING//
-               if(data.password == '') data.password = 'password' //testing passwords
-               ////////////
+               self.keypair = await generateKeyPair(data);
+               const {publicKey, privateKey} = self.keypair;
+               self.signedUsername = signMessage(data.username, privateKey);
 
-               const {publicKey, privateKey} = await generateKeyPair(data);
-               const msg = signMessage(data.username, privateKey);
-
-               const tpem = convertToPem({privateKey, publicKey});
-               // console.log(tpem.publicKey);
-               // console.log(verifySignedMessage(msg, publicKey));
-
-
-               const response = await post('login', {
-                  msg
-               });
-
+               const response = await post('login', {msg: self.signedUsername});
                await self.handleResponse(response);
 
                /// ONLY FOR TESTING ///
                const pem = convertToPem({privateKey, publicKey});
-               localStorage.setItem('privateKey', pem.privateKey);
+               localStorage.setItem('keyPair', JSON.stringify(pem));
                localStorage.setItem('username', data.username);
                ////////////////////////
 
@@ -99,22 +87,14 @@
 
                const data = self.getFormData();
 
-               //TESTING//
-               if(data.password == '') data.password = 'passwort' //testing passwords
-               ////////////
+               self.keypair = await generateKeyPair(data);
+               const {publicKey, privateKey} = self.keypair;
+               self.signedUsername = signMessage(data.username, privateKey);
 
-               const {publicKey, privateKey} = await generateKeyPair(data);
-               const keyPair2 = await generateKeyPair(data);
-
-
-               const msg = signMessage(data.username, privateKey);
                const pem = convertToPem({privateKey, publicKey});
-               console.log(pem.publicKey);
+               const msg = {...self.signedUsername, publicKey: pem.publicKey};
 
-               const response = await post('register', {
-                  msg,
-                  publicKey: pem.publicKey
-               });
+               const response = await post('register', msg);
                await self.handleResponse(response);
 
             }, 500);
@@ -130,11 +110,10 @@
             return data;
          },
          handleResponse: async function(response) {
-            console.log(response);
             if(response && response.result){
                this.showModal = false;
                this.$parent.loggedIn = true;
-               window.privateKey = (await generateKeyPair(this.getFormData())).privateKey;
+               this.$parent.privateKey = this.keyPair.privateKey;
             } else {
                handleError(response);
             }
@@ -147,19 +126,20 @@
       mounted: function () {
          document.addEventListener('register_event', this.registerEventHandler);
 
-         /// ONLY FOR TESTING ///
-         // const self = this;
-         // const privateKey = localStorage.getItem('privateKey');
-         // if(privateKey){
-         //    const msg = signMessage(localStorage.getItem('username'), privateKeyFromPem(privateKey));
-         //
-         //    post('login', {
-         //       msg
-         //    }).then(response => {
-         //       self.handleResponse(response);
-         //    });
-         // }
-         //////////////////////////////
+         // ONLY FOR TESTING ///
+         const self = this;
+         const pem = JSON.parse(localStorage.getItem('keyPair'));
+         if(pem){
+            self.keyPair = convertFromPem(pem);
+            const msg = signMessage(localStorage.getItem('username'), self.keyPair.privateKey);
+
+            post('login', {
+               msg
+            }).then(response => {
+               self.handleResponse(response);
+            });
+         }
+         ////////////////////////////
 
       },
       beforeDestroy: function () {

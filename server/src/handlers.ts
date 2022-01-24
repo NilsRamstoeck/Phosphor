@@ -66,9 +66,13 @@ export async function handleLogin(msg :PhosphorMessage){
 export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResponse | PhosphorErrorMessage>{
    if(msg.data == undefined || msg.data == null) return handleError(Constants.err.NO_DATA);
    //verify message
-   const signedMessage = (validateType(msg.data.msg, SignedMessageValidator)>=0?msg.data.msg:undefined) as typeof SignedMessageValidator;
+   console.log(msg);
+
+   const signedMessage = (validateType(msg.data, SignedMessageValidator)>=0?msg.data:undefined) as typeof SignedMessageValidator;
    const username = signedMessage.raw;
    const publicKey = msg.data.publicKey;
+
+
 
    //ensure all values are set
    if(signedMessage == undefined ||
