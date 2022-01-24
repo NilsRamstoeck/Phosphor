@@ -78,6 +78,9 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
       return handleError(Constants.err.INVALID_DATA_TYPE);
    }
 
+   console.log(`REGISTERING: ${username}`);
+
+
    if(!validateUsername(username))
    return handleError(Constants.err.INVALID_USERNAME);
 
@@ -114,7 +117,7 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
 
    return PhosphorResponse({
       data: {
-         contacts: user.contacts
+         success: true
       }
    });
 }

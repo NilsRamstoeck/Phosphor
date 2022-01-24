@@ -68,12 +68,17 @@ export function validateSession(sessionID :string, session :PhosphorSession){
 }
 
 export function verifySignedMessage(msg :SignedMessage, key :string){
-   const {raw} = msg;
-   const signature = Buffer.from(msg.signature, 'base64');
-   const publicKey = createPublicKey(key);
-   const verify = createVerify('sha256')
-   verify.write(raw);
-   verify.end();
+   try{
+      const {raw} = msg;
+      const signature = Buffer.from(msg.signature, 'base64');
+      const publicKey = createPublicKey(key);
+      const verify = createVerify('sha256')
+      verify.write(raw);
+      verify.end();
 
-   return verify.verify(publicKey, signature);
+      return verify.verify(publicKey, signature);
+   } catch (e){
+      console.log(e);
+      return false;
+   }
 }

@@ -109,18 +109,14 @@
 
                const msg = signMessage(data.username, privateKey);
                const pem = convertToPem({privateKey, publicKey});
-               const pem2 = convertToPem(keyPair2);
-               console.log(verifySignedMessage(msg, publicKey));
-               // console.log(verifySignedMessage(msg, keyPair2.publicKey));
-               console.log(publicKey, keyPair2.publicKey);
                console.log(pem.publicKey);
-               console.log(pem2.publicKey);
+
                const response = await post('register', {
                   msg,
                   publicKey: pem.publicKey
                });
-
                await self.handleResponse(response);
+
             }, 500);
          },
          getFormData : function() {
@@ -134,11 +130,10 @@
             return data;
          },
          handleResponse: async function(response) {
+            console.log(response);
             if(response && response.result){
-               const status = 'offline';
                this.showModal = false;
                this.$parent.loggedIn = true;
-               this.$parent.contacts = response.data.contacts.map(name => {return {name, status}});
                window.privateKey = (await generateKeyPair(this.getFormData())).privateKey;
             } else {
                handleError(response);
