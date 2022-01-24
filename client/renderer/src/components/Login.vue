@@ -5,9 +5,13 @@
          <h1 class="login" slot="header">LOGIN</h1>
          <form class="login login-form" method="post" @submit="login" slot="content">
 
-            <input class="login" type="text" name="username" placeholder="Username" required>
+            <input class="login" type="text" name="username" placeholder="Username" required value="Phospor">
             <br>
-            <input class="login" type="password" name="password" placeholder="Password" required>
+
+            <!-- TESTING -->
+            <input class="login" type="password" name="password" placeholder="Password" required-when-not-testing>
+            <!--         -->
+
             <br>
 
             <button v-if="true" class="login" type="submit" name="submit">Log In</button>
@@ -59,8 +63,20 @@
             setTimeout(async function () {
 
                const data = self.getFormData();
+
+               console.log(data);
+
+               //TESTING//
+               if(data.password == '') data.password = 'password' //testing passwords
+               ////////////
+
                const {publicKey, privateKey} = await generateKeyPair(data);
                const msg = signMessage(data.username, privateKey);
+
+               const tpem = convertToPem({privateKey, publicKey});
+               // console.log(tpem.publicKey);
+               // console.log(verifySignedMessage(msg, publicKey));
+
 
                const response = await post('login', {
                   msg
@@ -78,13 +94,27 @@
          },
          register: function(){
             const self = this;
+            //TODO: figure out why I used a timeout?
             setTimeout(async function () {
 
                const data = self.getFormData();
+
+               //TESTING//
+               if(data.password == '') data.password = 'passwort' //testing passwords
+               ////////////
+
                const {publicKey, privateKey} = await generateKeyPair(data);
+               const keyPair2 = await generateKeyPair(data);
+
 
                const msg = signMessage(data.username, privateKey);
                const pem = convertToPem({privateKey, publicKey});
+               const pem2 = convertToPem(keyPair2);
+               console.log(verifySignedMessage(msg, publicKey));
+               // console.log(verifySignedMessage(msg, keyPair2.publicKey));
+               console.log(publicKey, keyPair2.publicKey);
+               console.log(pem.publicKey);
+               console.log(pem2.publicKey);
                const response = await post('register', {
                   msg,
                   publicKey: pem.publicKey
@@ -123,17 +153,17 @@
          document.addEventListener('register_event', this.registerEventHandler);
 
          /// ONLY FOR TESTING ///
-         const self = this;
-         const privateKey = localStorage.getItem('privateKey');
-         if(privateKey){
-            const msg = signMessage(localStorage.getItem('username'), forge.pki.privateKeyFromPem(privateKey));
-
-            post('login', {
-               msg
-            }).then(response => {
-               self.handleResponse(response);
-            });
-         }
+         // const self = this;
+         // const privateKey = localStorage.getItem('privateKey');
+         // if(privateKey){
+         //    const msg = signMessage(localStorage.getItem('username'), privateKeyFromPem(privateKey));
+         //
+         //    post('login', {
+         //       msg
+         //    }).then(response => {
+         //       self.handleResponse(response);
+         //    });
+         // }
          //////////////////////////////
 
       },
