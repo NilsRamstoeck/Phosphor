@@ -17,14 +17,13 @@ try {
 
 let mainWindow: BrowserWindow;
 function createWindow () {
-   const { width, height } = screen.getPrimaryDisplay().workAreaSize
-
+   const width = 900 + 300, height = 600;
    // Create the browser window.
    mainWindow = new BrowserWindow({
-      width: width/2,
-      height: height/2,
-      minWidth: width/2,
-      minHeight: height/2,
+      width: width,
+      height: height,
+      minWidth: width,
+      minHeight: height,
       center: true,
       webPreferences: {
          nodeIntegration: true,
@@ -40,7 +39,7 @@ function createWindow () {
          {
             label: 'Toggle Developer Tools',
             accelerator: 'ctrl+shift+i',
-            click: () => {BrowserWindow.getFocusedWindow().toggleDevTools()}
+            click: () => {BrowserWindow.getFocusedWindow().webContents.toggleDevTools()}
          },         {
             label: 'Reload',
             accelerator: 'f5',
@@ -63,6 +62,8 @@ function createWindow () {
    mainWindow.on('closed', function () {
       mainWindow = null
    })
+
+   mainWindow.webContents.toggleDevTools();
 }
 
 app.on('ready', createWindow)
