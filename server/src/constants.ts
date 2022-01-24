@@ -9,6 +9,7 @@ export const err = {
    MISSING_LOGIN_DETAIL_ERROR: 'missing_login_detail',
    INVALID_USERNAME: 'invalid_username',
    INVALID_PASSWORD: 'invalid_password',
+   SIGNATURE_UNVERIFIABLE: 'signature_unverifiable', 
 
    WRONG_DETAILS: 'wrong_details',
    INEXISTENT_USER: 'inexistent_user',

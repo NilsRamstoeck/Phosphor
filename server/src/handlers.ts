@@ -95,7 +95,7 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
 
    if(!verifySignedMessage(signedMessage, publicKey))
    // TODO: replace with appropiate error
-   return handleError(Constants.err.INVALID_PASSWORD);
+   return handleError(Constants.err.SIGNATURE_UNVERIFIABLE);
 
 
    //enter new user into db
