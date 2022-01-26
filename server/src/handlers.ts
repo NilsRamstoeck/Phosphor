@@ -33,7 +33,7 @@ export async function handleLogin(msg :PhosphorMessage){
    if(msg.data == undefined || msg.data == null) return handleError(Constants.err.NO_DATA);
 
    //verify message
-   const signedMessage = (validateType(msg.data.msg, SignedMessageValidator)>=0?msg.data.msg:undefined) as typeof SignedMessageValidator;
+   const signedMessage = (validateType(msg.data, SignedMessageValidator)>=0?msg.data:undefined) as typeof SignedMessageValidator;
    const user = await findOne({
       collection: Constants.db.USERS_COLLECTION,
       find: {

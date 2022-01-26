@@ -1,7 +1,7 @@
 <template>
    <div class="app">
       <login v-if="!loggedIn"></login>
-      <phosphor :contacts=contacts v-if="loggedIn"></phosphor>
+      <phosphor v-if="loggedIn"></phosphor>
    </div>
 </template>
 
@@ -14,7 +14,8 @@
       data: function () {
          return{
             loggedIn: false,
-            contacts: []
+            keyPair: undefined,
+            signedUsername: undefined,
          }
       }
    }

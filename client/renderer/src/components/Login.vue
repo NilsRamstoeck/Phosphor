@@ -46,18 +46,17 @@
       name: 'Login',
       components: {Modal},
       props: {
-
       },
       data: function(){
          return {
             showModal: false,
-            signedUsername: null,
-            keypair: null,
+            // signedUsername: null,
+            // keyPair: null,
          }
       },
       methods: {
          login: function (e) {
-            e.preventDefault();
+            if(e) e.preventDefault();
             const self = this;
             setTimeout(async function () {
 
@@ -65,11 +64,11 @@
 
                console.log(data);
 
-               self.keypair = await generateKeyPair(data);
-               const {publicKey, privateKey} = self.keypair;
-               self.signedUsername = signMessage(data.username, privateKey);
+               self.$root.keyPair = await generateKeyPair(data);
+               const {publicKey, privateKey} = self.$root.keyPair;
+               self.$root.signedUsername = signMessage(data.username, privateKey);
 
-               const response = await post('login', {msg: self.signedUsername});
+               const response = await post('login', {...self.$root.signedUsername});
                await self.handleResponse(response);
 
                /// ONLY FOR TESTING ///
@@ -87,14 +86,13 @@
 
                const data = self.getFormData();
 
-               self.keypair = await generateKeyPair(data);
-               const {publicKey, privateKey} = self.keypair;
-               self.signedUsername = signMessage(data.username, privateKey);
+               self.$root.keyPair = await generateKeyPair(data);
+               const {publicKey, privateKey} = self.$root.keyPair;
+               self.$root.signedUsername = signMessage(data.username, privateKey);
 
                const pem = convertToPem({privateKey, publicKey});
-               const msg = {...self.signedUsername, publicKey: pem.publicKey};
 
-               const response = await post('register', msg);
+               const response = await post('register', {...self.$root.signedUsername, publicKey: pem.publicKey});
                await self.handleResponse(response);
 
             }, 500);
@@ -113,7 +111,6 @@
             if(response && response.result){
                this.showModal = false;
                this.$parent.loggedIn = true;
-               this.$parent.privateKey = this.keyPair.privateKey;
             } else {
                handleError(response);
             }
@@ -130,11 +127,11 @@
          const self = this;
          const pem = JSON.parse(localStorage.getItem('keyPair'));
          if(pem){
-            self.keyPair = convertFromPem(pem);
-            const msg = signMessage(localStorage.getItem('username'), self.keyPair.privateKey);
+            self.$root.keyPair = convertFromPem(pem);
+            self.$root.signedUsername = signMessage(localStorage.getItem('username'), self.$root.keyPair.privateKey);
 
             post('login', {
-               msg
+               ...self.$root.signedUsername
             }).then(response => {
                self.handleResponse(response);
             });

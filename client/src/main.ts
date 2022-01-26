@@ -66,7 +66,9 @@ function createWindow () {
    mainWindow.webContents.toggleDevTools();
 }
 
-app.on('ready', createWindow)
+app.on('ready', async () => {
+   createWindow();
+})
 
 app.on('window-all-closed', function () {
    if (process.platform !== 'darwin') app.quit()
