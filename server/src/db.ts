@@ -21,6 +21,7 @@ interface UpdateParams{
 const db_uri = `mongodb://${details.user}:${details.pass}\@${details.host}:${details.port}`;
 const client = new MongoClient(db_uri);
 
+
 export async function validateDatabase(){
    //Ensure username unique index
    try{
@@ -34,6 +35,9 @@ export async function validateDatabase(){
       },{
          unique: true
       })
+   }
+   catch(e){
+      throw e;
    }
    finally{
       await client.close();
@@ -50,7 +54,11 @@ export async function findOne(cmd :FindParams) :Promise<Document>{
 
       var doc = await collection.findOne(cmd.find);
 
-   } finally {
+   }
+   catch(e){
+      throw e;
+   }
+   finally {
       // Ensures that the client will close when you finish/error
       await client.close();
    }
@@ -75,7 +83,11 @@ export async function find(cmd :FindParams) :Promise<Document>{
          console.log(err);
       });
 
-   } finally {
+   }
+   catch(e){
+      throw e;
+   }
+   finally {
       // Ensures that the client will close when you finish/error
       await client.close();
    }
@@ -93,7 +105,11 @@ export async function insertOne(cmd :InserParams) :Promise<Boolean>{
       const collection = db.collection(cmd.collection);
 
       result = (await collection.insertOne(cmd.insert)).acknowledged;
-   } finally {
+   }
+   catch(e){
+      throw e;
+   }
+   finally {
       // Ensures that the client will close when you finish/error
       await client.close();
    }
@@ -110,7 +126,11 @@ export async function updateOne(cmd :UpdateParams){
 
       await collection.updateOne(cmd.find, {$set: cmd.update});
 
-   } finally {
+   }
+   catch(e){
+      throw e;
+   }
+   finally {
       // Ensures that the client will close when you finish/error
       await client.close();
    }
