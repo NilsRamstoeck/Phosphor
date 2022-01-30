@@ -1,9 +1,30 @@
 .modal .modal-wrapper .modal-content{
    --modal-width: 30vw;
-   background: var(--background);
    border-radius: 5px;
    padding: 0 1em 1em 1em;
    width: var(--modal-width);
+}
+
+.modal{
+  position: fixed;
+  z-index: 9999;
+}
+.modal-wrapper{
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5)
+}
+.modal-content{
+  margin: auto auto;
+  height: max-content;
+  width: 30vw;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--color-light-background);
 }
 
 //tablets

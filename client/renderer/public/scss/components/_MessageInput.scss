@@ -6,18 +6,19 @@
 }
 
 .message-input{
-   width: max-content;
+   width: clamp(300px, 70%, 550px);
    margin: 0 auto;
 }
 
 .message-input input{
-   width: clamp(300px, calc(90vw - 400px), 550px);
+   width: calc(100% - 52px);
    height: 40px;
    border: none;
    outline: none;
    padding-left: 5px;
    padding-top: 0;
    padding-bottom: 0;
+   margin: 0;
    font-size: 16px;
    border-radius: 5px 0 0 5px;
    background: var(--color-panel);
@@ -25,7 +26,10 @@
 }
 
 .message-input button{
+   position: relative;
+   left: -5px;
    height: 40px;
+   width: 40px;
    font-size: 18px;
    border: none;
    outline: none;
@@ -34,6 +38,7 @@
    aspect-ratio: 1/1;
    border-radius: 0 5px 5px 0;
    padding: 0;
+   margin: 0;
 }
 
 .message-input button:hover{

@@ -11,8 +11,8 @@
    --color-light-foreground: #333;
    --color-dark-foreground: #222;
 
-   --color-primary-light: #cd0000;
-   --color-primary-dark: #9a0000;
+   --color-primary-light: #aa0000;
+   --color-primary-dark: #8f0000;
 
 
    --color-background: var(--color-light-background);
@@ -43,6 +43,7 @@
 body, html{
    margin: 0;
    padding: 0;
+   min-width: 800px;
 }
 
 body{
@@ -64,7 +65,8 @@ button{
    border-radius: 5px;
    border: 0;
    transition: 0.1s ease;
-   padding: 0 5px 5px 5px;
+   margin: 0 5px;
+   padding: 5px 5px 5px 5px;
    &:hover{
       background: var(--color-primary-dark);
    }
