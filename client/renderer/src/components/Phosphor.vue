@@ -1,6 +1,6 @@
 <template>
    <div class="phosphor">
-      <contacts :contacts=contacts></contacts>
+      <contacts></contacts>
       <div class="chat-wrapper">
          <chat-header></chat-header>
          <messages :target=target></messages>
@@ -15,23 +15,24 @@
    import Contacts from './Contacts';
    import ChatHeader from './ChatHeader';
 
+   import {post} from 'functions';
+
    export default {
       name: 'phosphor',
       components: {MessageInput, Messages, Contacts, ChatHeader},
       props: {
-         contacts: {
-            type: Array,
-            required: true
-         }
       },
       data: function() {
          return {
-            target: {}
+            target: {},
          }
       },
       methods: {
          sendMessage: function () {
          }
+      },
+      beforeMount: async function () {
+         socket.connectToServer();
       },
    }
 </script>

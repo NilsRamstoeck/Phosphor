@@ -14,9 +14,9 @@ typeof Constants.err.MISSING_LOGIN_DETAIL_ERROR
 ;
 
 export interface SignedMessage{
-   raw: string,
-   hash: string,
-   signature: string
+   raw: '',
+   hash: '',
+   signature: ''
 }
 
 // Interface for incoming messages

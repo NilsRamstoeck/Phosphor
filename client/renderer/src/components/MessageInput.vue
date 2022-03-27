@@ -16,13 +16,15 @@
       },
       data: function() {
          return {
-            message: '',
+            message: 'Message',
 
          }
       },
       methods: {
          sendMessage: async function () {
-            const msg = signMessage(this.message, window.privateKey);
+            console.log(this.$root);
+            const msg = signMessage(this.message, this.$root.keyPair.privateKey);
+            socket.send(msg);
          }
       },
    }

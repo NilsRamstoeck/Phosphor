@@ -17,7 +17,7 @@ try {
 
 let mainWindow: BrowserWindow;
 function createWindow () {
-   const width = 900 + 300, height = 600;
+   const width = 900 + 400, height = 600;
    // Create the browser window.
    mainWindow = new BrowserWindow({
       width: width,

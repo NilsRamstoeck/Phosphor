@@ -16,10 +16,10 @@ import {
    PhosphorErrorMessage,
    PhosphorErrorType,
    PhosphorResponse,
+   SignedMessage
 } from './types';
 
-//defines the shape of received user data for logins and registering
-const SignedMessageValidator = {
+const SignedMessageValidator :SignedMessage= {
    raw: '',
    hash: '',
    signature: ''
@@ -33,7 +33,13 @@ export async function handleLogin(msg :PhosphorMessage){
    if(msg.data == undefined || msg.data == null) return handleError(Constants.err.NO_DATA);
 
    //verify message
-   const signedMessage = (validateType(msg.data, SignedMessageValidator)>=0?msg.data:undefined) as typeof SignedMessageValidator;
+   const signedMessage = (validateType(msg.data, SignedMessageValidator)>=0?msg.data:undefined) as SignedMessage;
+
+   //ensure all values are set
+   if(signedMessage == undefined){
+      return handleError(Constants.err.INVALID_DATA_TYPE);
+   }
+
    const user = await findOne({
       collection: Constants.db.USERS_COLLECTION,
       find: {
@@ -46,21 +52,16 @@ export async function handleLogin(msg :PhosphorMessage){
    const publicKey = user[Constants.db.PUBKEY_FIELD];
 
    //ensure all values are set
-   if(signedMessage == undefined || publicKey == null){
+   if(publicKey == null){
       return handleError(Constants.err.INVALID_DATA_TYPE);
    }
 
 
    if(!verifySignedMessage(signedMessage, publicKey))
-   // TODO: replace with appropiate error
    return handleError(Constants.err.INVALID_PASSWORD);
 
 
-   return PhosphorResponse({
-      data: {
-         contacts: user.contacts
-      }
-   });
+   return PhosphorResponse({});
 }
 
 export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResponse | PhosphorErrorMessage>{
@@ -68,15 +69,18 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
    //verify message
    console.log(msg);
 
-   const signedMessage = (validateType(msg.data, SignedMessageValidator)>=0?msg.data:undefined) as typeof SignedMessageValidator;
+   const signedMessage = (validateType(msg.data, SignedMessageValidator)>=0?msg.data:undefined) as SignedMessage;
+
+   //ensure all values are set
+   if(signedMessage == undefined){
+      return handleError(Constants.err.INVALID_DATA_TYPE);
+   }
+
    const username = signedMessage.raw;
    const publicKey = msg.data.publicKey;
 
-
-
    //ensure all values are set
-   if(signedMessage == undefined ||
-      publicKey == undefined || publicKey == null ||
+   if(publicKey == undefined || publicKey == null ||
       username == undefined || username == null
    ){
       return handleError(Constants.err.INVALID_DATA_TYPE);
@@ -115,13 +119,45 @@ export async function handleRegister(msg :PhosphorMessage) :Promise<PhosphorResp
    });
 
    if(!result)
-   // TODO: replace with appropiate error
    return handleError(Constants.err.PARSING_ERROR);
 
 
+   return PhosphorResponse({});
+}
+
+export async function handleContactsRequest(msg :PhosphorMessage): Promise<PhosphorErrorMessage | PhosphorResponse>{
+   if(msg.data == undefined || msg.data == null) return handleError(Constants.err.NO_DATA);
+
+   //verify message
+   const signedMessage = (validateType(msg.data, SignedMessageValidator)>=0?msg.data:undefined) as SignedMessage;
+
+   //ensure all values are set
+   if(signedMessage == undefined){
+      return handleError(Constants.err.INVALID_DATA_TYPE);
+   }
+
+   const user = await findOne({
+      collection: Constants.db.USERS_COLLECTION,
+      find: {
+         [Constants.db.USERNAME_FIELD]: signedMessage.raw
+      }
+   });
+
+   if(user==null)return handleError(Constants.err.INEXISTENT_USER);
+
+   const publicKey = user[Constants.db.PUBKEY_FIELD];
+
+   //ensure all values are set
+   if(signedMessage == undefined || publicKey == null){
+      return handleError(Constants.err.INVALID_DATA_TYPE);
+   }
+
+   if(!verifySignedMessage(signedMessage, publicKey))
+   return handleError(Constants.err.INVALID_PASSWORD);
+
    return PhosphorResponse({
       data: {
-         success: true
+         contacts: user.contacts
       }
    });
 }

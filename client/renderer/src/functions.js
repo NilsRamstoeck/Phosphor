@@ -12,7 +12,7 @@ export async function post (action, data) {
       data: data
    }
 
-   const response = await fetch(`http://localhost:2222/${action}`, {
+   const response = await fetch(`https://phosphor.nasram.net/${action}`, {
       method: 'post',
       headers: {
          "Content-Type": "application/json"

@@ -68,7 +68,7 @@
                const {publicKey, privateKey} = self.$root.keyPair;
                self.$root.signedUsername = signMessage(data.username, privateKey);
 
-               const response = await post('login', {...self.$root.signedUsername});
+               const response = await post('login', self.$root.signedUsername);
                await self.handleResponse(response);
 
                /// ONLY FOR TESTING ///
@@ -130,11 +130,12 @@
             self.$root.keyPair = convertFromPem(pem);
             self.$root.signedUsername = signMessage(localStorage.getItem('username'), self.$root.keyPair.privateKey);
 
-            post('login', {
-               ...self.$root.signedUsername
-            }).then(response => {
-               self.handleResponse(response);
-            });
+            post('login',self.$root.signedUsername)
+            .then(response => self.handleResponse(response));
+         } else {
+            document.querySelector('input[name=username]').value = 'Nasram'
+            document.querySelector('input[name=password]').value = 'password'
+            self.login();
          }
          ////////////////////////////
 
